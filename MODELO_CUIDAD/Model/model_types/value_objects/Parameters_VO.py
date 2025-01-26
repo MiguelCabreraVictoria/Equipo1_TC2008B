@@ -45,10 +45,10 @@ class Parameter:
         if len(self.destinities) == 0:
             raise ValueError("At there should be one destinity")
         
-        if len(self.car_destinities) != self.num_cars:
+        if len(self.cars_destinities) != self.num_cars:
             raise ValueError("The number of destinities for cars should be the same as num_cars.")
         
-        if len(self.person_destinities) != self.num_persons:
+        if len(self.persons_destinities) != self.num_persons:
             raise ValueError("The number of destinities for persons should be the same as num_persons.")
         
     def to_json(self):
