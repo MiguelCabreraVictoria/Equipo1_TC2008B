@@ -1,4 +1,6 @@
 from model_types.value_objects.Parameters_VO import Parameter
+from model_types.dtos.Destinities import Destinities
+from model_types.dtos.SemaphoreLight import SemaphoreLight
 
 param_01 = Parameter(
     environment_size=(20, 20),
@@ -20,6 +22,7 @@ param_01 = Parameter(
         (19, 2), (19, 3), (19, 4), (19, 5), (19, 6), (19, 7), (19, 8), (19, 9), (19, 10), (19, 11), (19, 12), 
         (19, 13), (19, 14), (19, 15), (19, 16), (19, 17), (19, 18), (19, 19)
     ],
+
     lanes=[(1,1),(1,2),(1,3),(1,4),(1,5),(1,6),(1,7),(1,9),(1,10),(1,11),(1,12),(1,13),(1,15),(1,16),(1,17),(1,18),
            (2,1),(2,2),(2,3),(2,4),(2,5),(2,6),(2,7),(2,9),(2,10),(2,11),(2,12),(2,13),(2,15),(2,16),(2,17),(2,18),
            (3,1),(3,2),(3,3),(3,4),(3,5),(3,6),(3,7),(3,9),(3,10),(3,11),(3,12),(3,13),(3,15),(3,16),(3,17),(3,18),
@@ -38,13 +41,27 @@ param_01 = Parameter(
            (17,4),(17,5),(17,6),(17,7),(17,8),(17,9),(17,10),(17,11),(17,12),(17,13),(17,15),(17,16),(17,17),(17,18),(18,1),
            (18,2),(18,3),(18,5),(18,6),(18,7),(18,8),(18,9),(18,10),(18,11),(18,12),(18,13),(18,15),(18,16),(18,17),(18,18)
     ],
-    intersections=[(0, 8), (0, 14), (1, 8), (1, 14), (2, 8), (2, 14), (3, 8), (4, 14), (12, 6), (12, 7), (12, 8), (12, 9)],
-    buildings=[(6, 4), (6, 11), (8, 4), (8, 14), (8, 18), (10, 14), (11, 1), (14, 4), (14, 7), (16, 4), (16, 7), (18, 17)],
-    destinities=[(3, 14), (4, 8), (8, 8), (9, 10), (11, 14), (12, 3), (16, 14), (18, 4)],
-    semaphores=[],
 
+    intersections=[(0, 8), (0, 14), (1, 8), (1, 14), (2, 8), (2, 14), (3, 8), (4, 14), (12, 6), (12, 7), (12, 8), (12, 9)],
+
+    buildings=[(6, 4), (6, 11), (8, 4), (8, 14), (8, 18), (10, 14), (11, 1), (14, 4), (14, 7), (16, 4), (16, 7), (18, 17)],
+
+    destinities=[{'destinity': Destinities.RESTAURANT, 'coordinates': (3,14)},
+                 {'destinity': Destinities.HOSPITAL, 'coordinates': (4,8)},
+                 {'destinity': Destinities.GAS, 'coordinates': (8,8)},
+                 {'destinity': Destinities.PARK, 'coordinates': (9,10)},
+                 {'destinity': Destinities.GAS, 'coordinates': (11,14)},
+                 {'destinity': Destinities.WORK, 'coordinates': (12,2)},
+                 {'destinity': Destinities.GYM, 'coordinates': (16,14)},
+                 {'destinity': Destinities.HOME, 'coordinates': (18,4)},
+    ],
+
+    semaphores=[{'position':(3,8), 'state': SemaphoreLight.GREEN},
+                {'position':(3,14), 'state': SemaphoreLight.GREEN},
+                {'position':(12,7), 'state': SemaphoreLight.GREEN}
+    ],
     cars_initial_speed=20,
     cars_initial_fuel=100,
-    cars_destinities=[],
-    persons_destinities=[]
+    cars_destinities=[Destinities.RESTAURANT, Destinities.HOSPITAL, Destinities.PARK, Destinities.WORK, Destinities.GYM, Destinities.GAS],
+    persons_destinities=[Destinities.HOME, Destinities.GYM, Destinities.PARK, Destinities.WORK]
 )
