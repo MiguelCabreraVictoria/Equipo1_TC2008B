@@ -3,19 +3,20 @@ import agentpy as ap
 
 class Car(ap.Agent):
     def setup(self):
+        self.env = self.model.environment
         self.position = None
         self.speed = self.p.cars_initial_speed
-        self.destinity
+        self.destinity = ""
         self.status = ""
         self.fuel = self.p.cars_initial_fuel
         self.path = []
         self.mailbox = []
 
-    def get_postion(self):
+    def get_position(self):
         """
         Obtiene la posicion actual del coche 
         """
-        pass
+        return self.env.positions[self]
 
     def avoid_collision(self):
         """
@@ -74,4 +75,7 @@ class Car(ap.Agent):
         Ejecuta las acciones del coche en cada paso de simulacion
 
         """
-        pass
+        print(f"Car {self.id} is executing")
+        print(f"Car {self.id} is in position {self.get_position()}")
+     
+ 

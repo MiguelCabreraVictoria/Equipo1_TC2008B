@@ -2,9 +2,10 @@ import agentpy as ap
 
 class Person(ap.Agent):
     def setup(self):
+        self.env = self.model.environment
         self.position = None
         self.destinity = None
-        self.status 
+        self.status = ""
         self.path = []
         self.mailbox = []
 
@@ -12,7 +13,7 @@ class Person(ap.Agent):
         """
         Obtiene la posicion actual del individuo
         """
-        pass
+        return self.env.positions[self]
 
     def calculate_path(self):
         """
@@ -28,4 +29,5 @@ class Person(ap.Agent):
         """
         Ejecuta las acciones del individuo en cada paso de la simulacion
         """
-        pass
+        print(f"Person {self.id} is executing")
+        print(f"Person {self.id} is in position {self.get_position()}")
