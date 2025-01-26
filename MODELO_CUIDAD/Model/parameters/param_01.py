@@ -62,6 +62,6 @@ param_01 = Parameter(
     ],
     cars_initial_speed=20,
     cars_initial_fuel=100,
-    cars_destinities=[Destinities.RESTAURANT, Destinities.HOSPITAL, Destinities.PARK, Destinities.WORK, Destinities.GYM, Destinities.GAS],
-    persons_destinities=[Destinities.HOME, Destinities.GYM, Destinities.PARK, Destinities.WORK]
-)
+    cars_destinities=[Destinities.RESTAURANT, Destinities.HOSPITAL, Destinities.PARK, Destinities.WORK],
+    persons_destinities=[Destinities.HOME, Destinities.GYM, Destinities.PARK, Destinities.WORK, Destinities.RESTAURANT, Destinities.GYM]
+).to_json()
