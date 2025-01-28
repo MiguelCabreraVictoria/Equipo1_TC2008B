@@ -91,6 +91,21 @@ class CityModel(ap.Model):
         self.environment.add_agents(self.cars, random=True)
         self.environment.add_agents(self.person, random=True)
 
+        # Asignar destinos a los agentes
+        self.agents_destination()
+
+    def agents_destination(self):
+        """
+        Asigna los destinos a los agentes
+        """
+
+        for idx, car in enumerate(self.cars):
+            car.destinity = self.p.cars_destinities[idx]
+
+        for idx, person in enumerate(self.person):
+            person.destinity = self.p.persons_destinities[idx]
+            
+
     def update_semaphores(self):
         """
         Cambia el estado de los semaforos en funcion al tiempo
