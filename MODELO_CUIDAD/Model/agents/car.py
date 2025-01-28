@@ -12,6 +12,20 @@ class Car(ap.Agent):
         self.path = []
         self.mailbox = []
 
+    def info(self):
+        """
+        Muestra la informacion del coche
+        """
+        print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+        print('This is a car')
+        print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+        print(f"Car {self.id} is in position {self.get_position()}")
+        print(f"Car {self.id} has a status of {self.status}")
+        print(f"Car {self.id} has a speed of {self.speed}")
+        print(f"Car {self.id} has a fuel of {self.fuel}")
+        print(f"Car {self.id} is going to {self.destinity.value}")
+        print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n")
+
     def get_position(self):
         """
         Obtiene la posicion actual del coche 
@@ -75,7 +89,6 @@ class Car(ap.Agent):
         Ejecuta las acciones del coche en cada paso de simulacion
 
         """
-        print(f"Car {self.id} is executing")
-        print(f"Car {self.id} is in position {self.get_position()}")
+        self.info()
      
  
