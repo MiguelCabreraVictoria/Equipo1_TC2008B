@@ -1,8 +1,6 @@
 from enum import Enum
 
-
-class CarStatus(Enum):
+class PersonStatus(Enum):
     IN_MOVEMENT = "moving"
     STOPPED = "stopped"
-    PARKED = "parked"
     WAITING = "waiting"

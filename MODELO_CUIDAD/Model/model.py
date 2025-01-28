@@ -2,6 +2,8 @@ from agents.car import Car
 from agents.person import Person
 from model_types.dtos.CellType import CellType
 from model_types.dtos.SemaphoreLight import SemaphoreLight
+from model_types.dtos.CarStatus import CarStatus
+from model_types.dtos.PersonStatus import PersonStatus
 from parameters.param_01 import param_01
 
 import agentpy as ap
@@ -79,7 +81,7 @@ class CityModel(ap.Model):
         self.num_cars = self.p.num_cars
         self.num_persons = self.p.num_persons
         self.cars = ap.AgentList(self, self.num_cars,Car)
-        self.person = ap.AgentList(self, self.num_persons, Person)
+        self.persons = ap.AgentList(self, self.num_persons, Person)
         self.max_speed = self.p.max_speed
         self.safe_distance = self.p.safe_distance
         self.semaphore_timelapse = self.p.semaphore_timelapse
@@ -89,7 +91,7 @@ class CityModel(ap.Model):
 
         # Agregar agentes al entorno
         self.environment.add_agents(self.cars, random=True)
-        self.environment.add_agents(self.person, random=True)
+        self.environment.add_agents(self.persons, random=True)
 
         # Asignar destinos a los agentes
         self.agents_destination()
@@ -102,9 +104,19 @@ class CityModel(ap.Model):
         for idx, car in enumerate(self.cars):
             car.destinity = self.p.cars_destinities[idx]
 
-        for idx, person in enumerate(self.person):
+        for idx, person in enumerate(self.persons):
             person.destinity = self.p.persons_destinities[idx]
-            
+
+    def agent_status(self):
+        """
+        Asigna el estado inicial a los agentes
+        """
+        
+        for idx, car in enumerate(self.cars):
+            car.status = CarStatus.IN_MOVEMENT
+
+        for person in self.persons:
+            person.status = PersonStatus.IN_MOVEMENT
 
     def update_semaphores(self):
         """
@@ -131,8 +143,8 @@ class CityModel(ap.Model):
             self.update_semaphores()
 
     def step(self):
-        # self.cars.execute()
-        # self.person.execute()
+        self.cars.execute()
+        self.persons.execute()
         pass
 
 
