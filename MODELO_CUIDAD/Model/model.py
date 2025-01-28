@@ -1,6 +1,7 @@
 from agents.car import Car
 from agents.person import Person
 from model_types.dtos.CellType import CellType
+from model_types.dtos.SemaphoreLight import SemaphoreLight
 from parameters.param_01 import param_01
 
 import agentpy as ap
@@ -53,11 +54,13 @@ class City(ap.Grid):
             x, y = destinity['coordinates']
             env[f"{x},{y}"] = destinity['destinity'].value
 
-    def add_semaphores(self):
+    def add_semaphores(self, env):
         """
         Agrega los semaforos en en el entorno
         """
-        pass
+        for semaphore in self.semaphores:
+            x, y = semaphore['position']
+            env[f"{x},{y}"] = semaphore['state'].value
 
     def add_properties(self, env):
         self.add_sidewalks(env)
@@ -65,7 +68,7 @@ class City(ap.Grid):
         self.add_intersections(env)
         self.add_buildings(env)
         self.add_destinities(env)
-        #self.add_semaphores(env)
+        self.add_semaphores(env)
 
 class CityModel(ap.Model):
 
@@ -92,19 +95,32 @@ class CityModel(ap.Model):
         """
         Cambia el estado de los semaforos en funcion al tiempo
         """ 
-        pass
+        # print("Updating semaphores")
+        for semaphore in self.environment.semaphores:
+            x, y = semaphore['position']
+            if semaphore['state'] == SemaphoreLight.GREEN:
+                # print(f'Changing semaphore {x},{y} to YELLOW')
+                semaphore['state'] = SemaphoreLight.YELLOW
+            elif semaphore['state'] == SemaphoreLight.RED:
+                # print(f'Changing semaphore {x},{y} to GREEN')
+                semaphore['state'] = SemaphoreLight.GREEN
+            elif semaphore['state'] == SemaphoreLight.YELLOW:
+                # print(f'Changing semaphore {x},{y} to RED')
+                semaphore['state'] = SemaphoreLight.RED
 
     def update(self):
         """
         Actualiza el estados antes de cada paso
         """
-        pass
+        if self.t % self.semaphore_timelapse == 0:
+            self.update_semaphores()
 
     def step(self):
-        self.cars.execute()
-        self.person.execute()
+        # self.cars.execute()
+        # self.person.execute()
+        pass
 
 
 model = CityModel(param_01)
-model.run(steps=1, display=False)
+model.run(steps=50, display=False)
 
