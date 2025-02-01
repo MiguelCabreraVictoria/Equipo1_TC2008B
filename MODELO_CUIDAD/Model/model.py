@@ -12,6 +12,8 @@ import random
 
 class City(ap.Grid):
     def setup(self):
+
+        
         self.sidewalks = self.p.sidewalks
         self.lanes = self.p.lanes
         self.intersections = self.p.intersections
@@ -54,7 +56,7 @@ class City(ap.Grid):
         """
         for destinity in self.destinities:
             x, y = destinity['coordinates']
-            env[f"{x},{y}"] = destinity['destinity'].value
+            env[f"{x},{y}"] = CellType.DESTINITY.value
 
     def add_semaphores(self, env):
         """
@@ -96,6 +98,12 @@ class CityModel(ap.Model):
         # Asignar destinos a los agentes
         self.agents_destination()
 
+        # Asignar estado inicial a los agentes
+        self.agent_status()
+
+        # Generar la red de rutas, para el calculo de caminos
+        self.routes_network = self.generate_routes_network()
+
     def agents_destination(self):
         """
         Asigna los destinos a los agentes
@@ -107,6 +115,24 @@ class CityModel(ap.Model):
         for idx, person in enumerate(self.persons):
             person.destinity = self.p.persons_destinities[idx]
 
+    def generate_routes_network(self):
+        
+        route_network = []
+        m, n = self.environment.shape
+
+        for x in range(m):
+            idx_row = []
+            for y in range(n):
+                # print(self.environment[f'{x},{y}'])
+                idx_row.append(self.environment[f'{x},{y}'])
+            # print(idx_row)
+            route_network.append(idx_row)
+        
+        route_network = np.array(route_network)
+        # print(road_network)
+        # print(road_network.shape)
+        return route_network       
+    
     def agent_status(self):
         """
         Asigna el estado inicial a los agentes
@@ -139,15 +165,35 @@ class CityModel(ap.Model):
         """
         Actualiza el estados antes de cada paso
         """
+        # Verificar si los agentes estan en una celda de edificio, al momento de 
+        for car in self.cars:
+            car_position = car.get_position()
+            if car_position in self.p.buildings:
+                print(f'Car {car.id} is in a building cell, car will be moved')
+
+        for person in self.persons:
+            person_position = person.get_position()
+            if person_position in self.p.buildings:
+                print(f'Person {person.id} is in a building cell, person will be moved') 
+
         if self.t % self.semaphore_timelapse == 0:
             self.update_semaphores()
 
     def step(self):
+        
         self.cars.execute()
         self.persons.execute()
-        pass
+
+
+
+
+
+    def end(self):
+        print('Simulation has ended')
+        
 
 
 model = CityModel(param_01)
-model.run(steps=50, display=False)
+model.run(steps=1, display=False)
+
 
