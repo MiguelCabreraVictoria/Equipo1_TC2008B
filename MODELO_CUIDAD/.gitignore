@@ -1,4 +1,75 @@
-env
+# Archivos de Python
+env/
 requirements.txt
-
 *.pyc
+
+# Archivos temporales de Unity
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+UserSettings/
+MemoryCaptures/
+
+# Plastic SCM
+.plastic/
+
+# Archivos innecesarios en Assets
+**/Assets/AssetStoreTools/
+**/Assets/Plugins/PlasticSCM*/
+
+# Archivos privados y de configuración
+*.private
+*.private.meta
+^*.private.[0-9]+$
+^*.private.[0-9]+.meta$
+
+# Archivos de IDEs
+.vs/
+.vscode/
+.idea/
+.gradle/
+.consulo/
+
+# Archivos de compilación
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+
+# Archivos de depuración y logs
+sysinfo.txt
+crashlytics-build.properties
+
+# Builds finales
+*.apk
+*.aab
+*.app
+*.unitypackage
+
+# Addressables y StreamingAssets
+**/Assets/AddressableAssetsData/*/*.bin*
+**/Assets/StreamingAssets/aa.meta
+**/assets/streamingassets/*/aa/*
+
+# Archivos del sistema
+.DS_Store*
+Thumbs.db
+Desktop.ini
+
+
