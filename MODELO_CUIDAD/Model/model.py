@@ -104,6 +104,10 @@ class CityModel(ap.Model):
         # Generar la red de rutas, para el calculo de caminos
         self.routes_network = self.generate_routes_network()
 
+        self.generate_paths()
+
+        self.agents_not_in_buildings()
+
     def agents_destination(self):
         """
         Asigna los destinos a los agentes
@@ -131,7 +135,17 @@ class CityModel(ap.Model):
         route_network = np.array(route_network)
         # print(road_network)
         # print(road_network.shape)
-        return route_network       
+        return route_network   
+
+    def generate_paths(self):
+        """
+        Genera los caminos optimos para los agentes
+        """
+        for car in self.cars:
+            car.calculate_path()
+
+        for person in self.persons:
+            person.calculate_path()    
     
     def agent_status(self):
         """
@@ -161,31 +175,47 @@ class CityModel(ap.Model):
                 # print(f'Changing semaphore {x},{y} to RED')
                 semaphore['state'] = SemaphoreLight.RED
 
+    def agents_not_in_buildings(self):
+        actions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+        new_x, new_y = random.choice(actions)
+        
+        for person in self.persons:
+            if person.get_position() in self.p.buildings:
+                # print(f"Person {person.id} is in a building at {person.get_position()}")
+                x, y = person.get_position()
+                pos_x, pos_y = x + new_x, y + new_y
+                self.environment.move_to(person, (pos_x, pos_y))
+                # print(f"Person {person.id} is moving to {(pos_x, pos_y)}")
+                person.calculate_path()
+
+        for car in self.cars:
+            if car.get_position() in self.p.buildings:
+                # print(f"Car {car.id} is in a building at {car.get_position()}")
+                x, y = car.get_position()
+                pos_x, pos_y = x + new_x, y + new_y
+                self.environment.move_to(car, (pos_x, pos_y))
+                # print(f"Car {car.id} is moving to {(pos_x, pos_y)}")
+                car.calculate_path()
+
+
     def update(self):
         """
         Actualiza el estados antes de cada paso
         """
-        # Verificar si los agentes estan en una celda de edificio, al momento de 
-        for car in self.cars:
-            car_position = car.get_position()
-            if car_position in self.p.buildings:
-                print(f'Car {car.id} is in a building cell, car will be moved')
-
-        for person in self.persons:
-            person_position = person.get_position()
-            if person_position in self.p.buildings:
-                print(f'Person {person.id} is in a building cell, person will be moved') 
 
         if self.t % self.semaphore_timelapse == 0:
             self.update_semaphores()
 
     def step(self):
         
-        self.cars.execute()
+      
+
+
+        self.agents_not_in_buildings()
+        # self.cars.execute()
         self.persons.execute()
 
-
-
+        
 
 
     def end(self):
@@ -194,6 +224,9 @@ class CityModel(ap.Model):
 
 
 model = CityModel(param_01)
-model.run(steps=1, display=False)
+model.run(steps=100, display=False)
+
+
+
 
 
