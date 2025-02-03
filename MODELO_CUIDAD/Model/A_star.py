@@ -36,14 +36,14 @@ class A_star:
         available_cells = {
             'person': {CellType.SIDEWALK.value, CellType.LANE.value, CellType.INTERSECTION.value, CellType.DESTINITY.value},
             'car': {CellType.LANE.value, CellType.INTERSECTION.value, CellType.DESTINITY.value}
-        }[type]
+        }[agent_type]
 
         
         # Nodos visitados
         closed_set = set()
         # Nodos por visitar
         open_set = [(0, start)]
-        
+
         came_from = {}
         # Costo desde el inicio hasta el nodo actual
         g_score = {start: 0}
