@@ -1,7 +1,7 @@
 import agentpy as ap
+import random
 
-
-
+from model_types.dtos.PersonStatus import PersonStatus
 from A_star import A_star
 
 class Person(ap.Agent):
@@ -9,7 +9,7 @@ class Person(ap.Agent):
         self.env = self.model.environment
         self.position = None
         self.destinity = None
-        self.status = ""
+        self.status = None
         self.path = []
         self.mailbox = []
 
@@ -31,6 +31,7 @@ class Person(ap.Agent):
         Obtiene la posicion actual del individuo
         """
         return self.env.positions[self]
+    
 
     def calculate_path(self):
         """
@@ -47,12 +48,31 @@ class Person(ap.Agent):
         """
         Verifica si el individuo ha llegado a su destino
         """
+        for destination in self.env.destinities:
+            if destination['coordinates'] == self.get_position():
+                self.status = PersonStatus.IN_DESTINY
+                print(f"Person {self.id} is in destiny")
+    
+        
+    def move(self):
+        """
+        Mueve al individuo en la direccion del camino
+        """
+        if self.path:
 
+            next_position = self.path.pop(0)
+            self.env.move_to(self, next_position)
+            print(f"Person {self.id} moved to {next_position}, {self.status.value}")
+            self.in_destiny()
+        
+        
     def execute(self):
         """
         Ejecuta las acciones del individuo en cada paso de la simulacion
         """
-        self.calculate_path()
-        self.info()
+       
+        self.move()
+        # self.info()
+        
         
       
