@@ -12,6 +12,8 @@ import random
 
 class City(ap.Grid):
     def setup(self):
+
+        
         self.sidewalks = self.p.sidewalks
         self.lanes = self.p.lanes
         self.intersections = self.p.intersections
@@ -54,7 +56,7 @@ class City(ap.Grid):
         """
         for destinity in self.destinities:
             x, y = destinity['coordinates']
-            env[f"{x},{y}"] = destinity['destinity'].value
+            env[f"{x},{y}"] = CellType.DESTINITY.value
 
     def add_semaphores(self, env):
         """
@@ -96,6 +98,16 @@ class CityModel(ap.Model):
         # Asignar destinos a los agentes
         self.agents_destination()
 
+        # Asignar estado inicial a los agentes
+        self.agent_status()
+
+        # Generar la red de rutas, para el calculo de caminos
+        self.routes_network = self.generate_routes_network()
+
+        self.generate_paths()
+
+        self.agents_not_in_buildings()
+
     def agents_destination(self):
         """
         Asigna los destinos a los agentes
@@ -107,6 +119,34 @@ class CityModel(ap.Model):
         for idx, person in enumerate(self.persons):
             person.destinity = self.p.persons_destinities[idx]
 
+    def generate_routes_network(self):
+        
+        route_network = []
+        m, n = self.environment.shape
+
+        for x in range(m):
+            idx_row = []
+            for y in range(n):
+                # print(self.environment[f'{x},{y}'])
+                idx_row.append(self.environment[f'{x},{y}'])
+            # print(idx_row)
+            route_network.append(idx_row)
+        
+        route_network = np.array(route_network)
+        # print(road_network)
+        # print(road_network.shape)
+        return route_network   
+
+    def generate_paths(self):
+        """
+        Genera los caminos optimos para los agentes
+        """
+        for car in self.cars:
+            car.calculate_path()
+
+        for person in self.persons:
+            person.calculate_path()    
+    
     def agent_status(self):
         """
         Asigna el estado inicial a los agentes
@@ -135,19 +175,58 @@ class CityModel(ap.Model):
                 # print(f'Changing semaphore {x},{y} to RED')
                 semaphore['state'] = SemaphoreLight.RED
 
+    def agents_not_in_buildings(self):
+        actions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+        new_x, new_y = random.choice(actions)
+        
+        for person in self.persons:
+            if person.get_position() in self.p.buildings:
+                # print(f"Person {person.id} is in a building at {person.get_position()}")
+                x, y = person.get_position()
+                pos_x, pos_y = x + new_x, y + new_y
+                self.environment.move_to(person, (pos_x, pos_y))
+                # print(f"Person {person.id} is moving to {(pos_x, pos_y)}")
+                person.calculate_path()
+
+        for car in self.cars:
+            if car.get_position() in self.p.buildings:
+                # print(f"Car {car.id} is in a building at {car.get_position()}")
+                x, y = car.get_position()
+                pos_x, pos_y = x + new_x, y + new_y
+                self.environment.move_to(car, (pos_x, pos_y))
+                # print(f"Car {car.id} is moving to {(pos_x, pos_y)}")
+                car.calculate_path()
+
+
     def update(self):
         """
         Actualiza el estados antes de cada paso
         """
+
         if self.t % self.semaphore_timelapse == 0:
             self.update_semaphores()
 
     def step(self):
-        self.cars.execute()
+        
+      
+
+
+        self.agents_not_in_buildings()
+        # self.cars.execute()
         self.persons.execute()
-        pass
+
+        
+
+
+    def end(self):
+        print('Simulation has ended')
+        
 
 
 model = CityModel(param_01)
-model.run(steps=50, display=False)
+model.run(steps=100, display=False)
+
+
+
+
 
