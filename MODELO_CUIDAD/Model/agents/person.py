@@ -64,7 +64,17 @@ class Person(ap.Agent):
             self.env.move_to(self, next_position)
             print(f"Person {self.id} moved to {next_position}, {self.status.value}")
             self.in_destiny()
+    
+    
+    
+    def check_collision(self, next_position):
+        return any(agent.get_position() == next_position for agent in self.env.agents)
+    
         
+
+
+
+
         
     def execute(self):
         """
