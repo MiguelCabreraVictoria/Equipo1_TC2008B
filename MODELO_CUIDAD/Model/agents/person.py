@@ -49,21 +49,26 @@ class Person(ap.Agent):
         Verifica si el individuo ha llegado a su destino
         """
         for destination in self.env.destinities:
-            if destination['coordinates'] == self.get_position():
-                self.status = PersonStatus.IN_DESTINY
-                print(f"Person {self.id} is in destiny")
+            if self.destinity.value == destination['destinity']:
+                if destination['coordinates'] == self.get_position():
+                    self.status = PersonStatus.IN_DESTINY
+                    print(f"Person {self.id} is in destiny")
+                    
     
         
     def move(self):
         """
         Mueve al individuo en la direccion del camino
         """
-        if self.path:
 
-            next_position = self.path.pop(0)
-            self.env.move_to(self, next_position)
-            print(f"Person {self.id} moved to {next_position}, {self.status.value}")
-            self.in_destiny()
+        if self.status == PersonStatus.IN_MOVEMENT:
+            if self.path:
+
+                next_position = self.path.pop(0)
+                self.env.move_to(self, next_position)
+                print(f"Person {self.id} moved to {next_position}, {self.status.value}")
+        
+        self.in_destiny()
     
     
     

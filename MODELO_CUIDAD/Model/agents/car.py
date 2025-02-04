@@ -78,6 +78,13 @@ class Car(ap.Agent):
                         self.speed = 0
                         self.communicate('position', agent, message=message)
         
+   
+
+        if self.status == CarStatus.STOPPED and len(filtered_agents) == 0:
+            self.status = CarStatus.IN_MOVEMENT
+            self.speed = self.p.cars_initial_speed
+            print(f"Car {self.id} started moving again")
+        
 
                     
 
@@ -145,8 +152,12 @@ class Car(ap.Agent):
         """
         Verifica si el coche ha llegado a su destino
         """
-        if self.get_position() == self.destinity:
-            self.status = CarStatus.IN_DESTINY
+        for destination in self.env.destinities:
+            if self.destinity.value == destination['destinity']:
+                if destination['coordinates'] == self.get_position():
+                    self.status = CarStatus.IN_DESTINY
+                    print(f"Car {self.id} is in destiny")
+
         
 
     def communicate(self,mesage_type,recipient, message):
@@ -186,6 +197,7 @@ class Car(ap.Agent):
             if self.path:
                 next_position = self.path.pop(0)
                 self.env.move_to(self, next_position)
+                print(f"Car {self.id} moved to {next_position}, {self.status.value}")
             self.fuel -= 7
         
         self.in_destiny()
@@ -195,6 +207,7 @@ class Car(ap.Agent):
         Ejecuta las acciones del coche en cada paso de simulacion
 
         """
+
         # self.info()
         self.move()
         

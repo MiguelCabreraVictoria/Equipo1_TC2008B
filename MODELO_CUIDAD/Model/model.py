@@ -207,17 +207,12 @@ class CityModel(ap.Model):
             self.update_semaphores()
 
     def step(self):
-        
-      
-
 
         self.agents_not_in_buildings()
-        # self.cars.execute()
+        self.cars.execute()
         self.persons.execute()
 
         
-
-
     def end(self):
         print('Simulation has ended')
         
