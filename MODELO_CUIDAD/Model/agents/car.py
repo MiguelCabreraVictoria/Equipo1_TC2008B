@@ -2,9 +2,9 @@ import agentpy as ap
 import numpy as np 
 import random
 
-from model_types.dtos.CarStatus import CarStatus
-from model_types.dtos.SemaphoreLight import SemaphoreLight
-from A_star import A_star
+from Model.model_types.dtos.CarStatus import CarStatus
+from Model.model_types.dtos.SemaphoreLight import SemaphoreLight
+from Model.A_star import A_star
 
 class Car(ap.Agent):
     def setup(self):
@@ -89,16 +89,16 @@ class Car(ap.Agent):
             for agent in filtered_agents:
                 agent_type = agent.__class__.__name__
                 if agent_type == 'Person':
-                    print(f"Car {self.id} is stopping because of a person")
+                    # print(f"Car {self.id} is stopping because of a person")
                     self.status = CarStatus.STOPPED
                     self.speed = 0
                 elif agent_type == 'Car':
                     if self.check_mailbox(agent.id):
-                        print(f"Car {agent.id} is already stopped")
-                        
+                        # print(f"Car {agent.id} is already stopped")
+                        return
                     else:
                         message = f"Car {self.id} is stopping because of a car {agent.id}"
-                        print(message)
+                        # print(message)
                         self.status = CarStatus.STOPPED
                         self.speed = 0
                         self.communicate('position', agent, message=message)
@@ -108,7 +108,7 @@ class Car(ap.Agent):
         if self.status == CarStatus.STOPPED and len(filtered_agents) == 0:
             self.status = CarStatus.IN_MOVEMENT
             self.speed = self.p.cars_initial_speed
-            print(f"Car {self.id} started moving again")
+            # print(f"Car {self.id} started moving again")
         
 
                     
@@ -124,7 +124,7 @@ class Car(ap.Agent):
         start = self.get_position()
         goal = self.destinity_coordinates
         self.path = A_star.find_path(road_network=self.model.routes_network, start=start, goal=goal, agent_type='car')
-        print(f"Car {self.id} calculated path: {self.path}")
+        # print(f"Car {self.id} calculated path: {self.path}")
 
     def get_semphore_state(self):
         """
@@ -153,7 +153,7 @@ class Car(ap.Agent):
         if state is None:
             return
         if state == SemaphoreLight.RED:
-            print(f"Car {self.id} is waiting at semaphore")
+            # print(f"Car {self.id} is waiting at semaphore")
             self.status = CarStatus.WAITING
             self.speed = 0
 
@@ -177,7 +177,7 @@ class Car(ap.Agent):
         Verifica si el coche ha llegado a su destino
         """
         if self.get_position() == self.destinity_coordinates:
-            print(f"Car {self.id} arrived to {self.destinity.value}")
+            # print(f"Car {self.id} arrived to {self.destinity.value}")
             self.status = CarStatus.IN_DESTINY
             self.speed = 0
             
@@ -217,15 +217,20 @@ class Car(ap.Agent):
         self.wait_semaphore()
 
         if self.fuel < 0:
-            print(f"Car {self.id} is out of fuel")
+            # print(f"Car {self.id} is out of fuel")
             self.status = CarStatus.STOPPED
 
         if self.status == CarStatus.IN_MOVEMENT and self.fuel > 0:
             if self.path:
                 next_position = self.path.pop(0)
                 self.env.move_to(self, next_position)
-                print(f"Car {self.id} moved to {next_position}, {self.status.value}")
+                # print(f"Car {self.id} moved to {next_position}, {self.status.value}")
             self.fuel -= 0.5
+
+            change_speed = random.randint(0, 1)
+
+            if change_speed == 1:
+                self.speed  = random.randint(20, 60)
         
         self.in_destiny()
 

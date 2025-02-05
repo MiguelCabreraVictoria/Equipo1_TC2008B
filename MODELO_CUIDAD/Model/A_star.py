@@ -1,7 +1,7 @@
 import heapq
 import numpy as np
 
-from model_types.dtos.CellType import CellType
+from Model.model_types.dtos.CellType import CellType
 
 """
 Referencias: https://www.geeksforgeeks.org/a-search-algorithm-in-python/

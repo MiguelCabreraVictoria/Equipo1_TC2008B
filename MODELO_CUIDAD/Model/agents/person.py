@@ -1,8 +1,7 @@
 import agentpy as ap
-import random
 
-from model_types.dtos.PersonStatus import PersonStatus
-from A_star import A_star
+from Model.model_types.dtos.PersonStatus import PersonStatus
+from Model.A_star import A_star
 
 # TODO: Save the path and info about the person, to send it to the server
 
@@ -65,7 +64,7 @@ class Person(ap.Agent):
         goal = self.destinity_coordinates
         
         self.path = A_star.find_path(self.model.routes_network, start, goal, 'person')
-        print(f"Person {self.id} has a path of {self.path}")
+        # print(f"Person {self.id} has a path of {self.path}")
             
 
     def in_destiny(self):
@@ -74,7 +73,7 @@ class Person(ap.Agent):
         """
         if self.get_position() == self.destinity_coordinates:
             self.status = PersonStatus.IN_DESTINY
-            print(f"Person {self.id} is in destiny, {self.destinity.value}")
+            # print(f"Person {self.id} is in destiny, {self.destinity.value}")
                     
     
     def move(self):
@@ -87,7 +86,7 @@ class Person(ap.Agent):
 
                 next_position = self.path.pop(0)
                 self.env.move_to(self, next_position)
-                print(f"Person {self.id} moved to {next_position}, {self.status.value}")
+                # print(f"Person {self.id} moved to {next_position}, {self.status.value}")
         
         self.in_destiny()
     

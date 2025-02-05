@@ -1,10 +1,10 @@
-from agents.car import Car
-from agents.person import Person
-from model_types.dtos.CellType import CellType
-from model_types.dtos.SemaphoreLight import SemaphoreLight
-from model_types.dtos.CarStatus import CarStatus
-from model_types.dtos.PersonStatus import PersonStatus
-from parameters.param_01 import param_01
+from Model.agents.car import Car
+from Model.agents.person import Person
+from Model.model_types.dtos.CellType import CellType
+from Model.model_types.dtos.SemaphoreLight import SemaphoreLight
+from Model.model_types.dtos.CarStatus import CarStatus
+from Model.model_types.dtos.PersonStatus import PersonStatus
+from Model.parameters.param_01 import param_01
 
 import agentpy as ap
 import numpy as np
@@ -225,10 +225,13 @@ class CityModel(ap.Model):
         print('Simulation has ended')
 
 
-
 model = CityModel(param_01)
-model.run(steps=50, display=False)
+model.run(steps=150, display=False)
 
-print(model.model_data) 
+model_data = model.model_data
+
+
+
+
 
 

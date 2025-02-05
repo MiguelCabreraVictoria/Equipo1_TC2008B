@@ -1,6 +1,6 @@
-from model_types.value_objects.Parameters_VO import Parameter
-from model_types.dtos.Destinities import Destinities
-from model_types.dtos.SemaphoreLight import SemaphoreLight
+from Model.model_types.value_objects.Parameters_VO import Parameter
+from Model.model_types.dtos.Destinities import Destinities
+from Model.model_types.dtos.SemaphoreLight import SemaphoreLight
 
 param_01 = Parameter(
     environment_size=(20, 20),
