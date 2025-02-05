@@ -20,14 +20,28 @@ public class UnityClient : MonoBehaviour
             try
             {
                 JObject data = JObject.Parse(e.Data);
-
                 
                 int id = (int)data["id"];
-                string type = (string)data["type"];  
+                string type = (string)data["type"];
                 string status = (string)data["status"];
-                int x = (int)data["x"];
-                int y = (int)data["y"];
-                int z = (int)data["z"];
+                string destiny = (string)data["destiny"];
+
+                JArray positionArray = (JArray)data["position"];
+                float x = (float)positionArray[0];
+                float y = 1.25f;
+                float z = (float)positionArray[1];
+
+                if(type == "Car")
+                {
+                    int speed = (int)data["speed"];
+                    float fuel = (int)data["fuel"];
+                    Debug.Log($"Coche recibido: ID={id}, Estado={status}, Posición=({x}, {z}), Velocidad={speed}, Combustible={fuel}, Destino={destiny}");
+                }
+                else if (type == "Person")
+                {
+                    Debug.Log($"Persona recibida: ID={id}, Estado={status}, Posición=({x}, {z}), Destino={destiny}");
+                }
+
 
                 Debug.Log($"Mensaje recibido: ID={id}, Tipo={type}, Estado={status}, Posición=({x}, {y}, {z})");
             }

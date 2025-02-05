@@ -33,18 +33,18 @@ class Person(ap.Agent):
         info = {
             'id': self.id,
             'type': 'Person',
-            'position': self.get_position(),
+            'position': list(self.get_position()),
             'status': self.status.value,
             'destinity': self.destinity.value
         }
 
         if self.status == PersonStatus.IN_DESTINY and not self.info_added:
             self.info_added = True
-            print(info)
+            #print(info)
             self.model.model_data.append(info)
         
         if self.status != PersonStatus.IN_DESTINY:
-            print(info)
+            #print(info)
             self.model.model_data.append(info)
     
 
@@ -95,11 +95,6 @@ class Person(ap.Agent):
     def check_collision(self, next_position):
         return any(agent.get_position() == next_position for agent in self.env.agents)
     
-        
-
-
-
-
         
     def execute(self):
         """

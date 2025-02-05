@@ -39,7 +39,7 @@ class Car(ap.Agent):
         info = {
             'id': self.id,
             'type': 'Car',
-            'position': self.get_position(),
+            'position': list(self.get_position()),
             'status': self.status.value,
             'speed': self.speed,
             'fuel': self.fuel,
@@ -48,11 +48,11 @@ class Car(ap.Agent):
 
         if self.status == CarStatus.IN_DESTINY and not self.info_added and self.fuel > 0:
             self.info_added = True
-            print(info)
+            #print(info)
             self.model.model_data.append(info)
         
         if self.status != CarStatus.IN_DESTINY and self.fuel > 0:
-            print(info)
+            #print(info)
             self.model.model_data.append(info)
 
         
