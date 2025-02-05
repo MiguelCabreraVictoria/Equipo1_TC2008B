@@ -8,7 +8,7 @@ async def ws_server(websocket):
     try:
         async for message in websocket:
             for client in connected_clients:
-                # print(f"Received: {message}")
+                print(f"Received: {message}")
                 if client != websocket:  # No enviar el mensaje al remitente
                     await client.send(message)
                     print(f'{message} enviado a {client}')
