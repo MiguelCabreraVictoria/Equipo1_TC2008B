@@ -8,12 +8,14 @@ from parameters.param_01 import param_01
 
 import agentpy as ap
 import numpy as np
-import random 
+import random
+
+# TODO: Add the directions to the lanes (N, S, E, W)
 
 class City(ap.Grid):
     def setup(self):
 
-        
+
         self.sidewalks = self.p.sidewalks
         self.lanes = self.p.lanes
         self.intersections = self.p.intersections
@@ -21,7 +23,7 @@ class City(ap.Grid):
         self.destinities = self.p.destinities
         self.semaphores = self.p.semaphores
 
-        
+
     def add_sidewalks(self, env):
         """
         Agrega las banquetas en en el entorno
@@ -88,6 +90,9 @@ class CityModel(ap.Model):
         self.safe_distance = self.p.safe_distance
         self.semaphore_timelapse = self.p.semaphore_timelapse
 
+        self.model_data = []
+
+
         # Agregar propiedades al entorno
         self.environment.add_properties(self.environment)
 
@@ -108,6 +113,7 @@ class CityModel(ap.Model):
 
         self.agents_not_in_buildings()
 
+
     def agents_destination(self):
         """
         Asigna los destinos a los agentes
@@ -115,12 +121,14 @@ class CityModel(ap.Model):
 
         for idx, car in enumerate(self.cars):
             car.destinity = self.p.cars_destinities[idx]
+            car.destinity_coordinates = [destination['coordinates'] for destination in self.environment.destinities if destination['destinity'] == car.destinity][0]
 
         for idx, person in enumerate(self.persons):
             person.destinity = self.p.persons_destinities[idx]
+            person.destinity_coordinates = [destination['coordinates'] for destination in self.environment.destinities if destination['destinity'] == person.destinity][0]
 
     def generate_routes_network(self):
-        
+
         route_network = []
         m, n = self.environment.shape
 
@@ -131,11 +139,11 @@ class CityModel(ap.Model):
                 idx_row.append(self.environment[f'{x},{y}'])
             # print(idx_row)
             route_network.append(idx_row)
-        
+
         route_network = np.array(route_network)
         # print(road_network)
         # print(road_network.shape)
-        return route_network   
+        return route_network
 
     def generate_paths(self):
         """
@@ -145,13 +153,13 @@ class CityModel(ap.Model):
             car.calculate_path()
 
         for person in self.persons:
-            person.calculate_path()    
-    
+            person.calculate_path()
+
     def agent_status(self):
         """
         Asigna el estado inicial a los agentes
         """
-        
+
         for idx, car in enumerate(self.cars):
             car.status = CarStatus.IN_MOVEMENT
 
@@ -161,7 +169,7 @@ class CityModel(ap.Model):
     def update_semaphores(self):
         """
         Cambia el estado de los semaforos en funcion al tiempo
-        """ 
+        """
         # print("Updating semaphores")
         for semaphore in self.environment.semaphores:
             x, y = semaphore['position']
@@ -178,7 +186,7 @@ class CityModel(ap.Model):
     def agents_not_in_buildings(self):
         actions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
         new_x, new_y = random.choice(actions)
-        
+
         for person in self.persons:
             if person.get_position() in self.p.buildings:
                 # print(f"Person {person.id} is in a building at {person.get_position()}")
@@ -212,16 +220,15 @@ class CityModel(ap.Model):
         self.cars.execute()
         self.persons.execute()
 
-        
+
     def end(self):
         print('Simulation has ended')
-        
+
 
 
 model = CityModel(param_01)
-model.run(steps=100, display=False)
+model.run(steps=50, display=False)
 
-
-
+print(model.model_data) 
 
 

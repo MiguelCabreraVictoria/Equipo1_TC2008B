@@ -12,25 +12,50 @@ class Car(ap.Agent):
         self.position = None
         self.speed = self.p.cars_initial_speed
         self.destinity = None
+        self.destinity_coordinates = None
         self.status = None
         self.fuel = self.p.cars_initial_fuel
         self.path = []
         self.mailbox = []
+        self.info_added = False
 
     def info(self):
         """
         Muestra la informacion del coche
         """
-        print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-        print('This is a car')
-        print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-        print(f"Car {self.id} is in position {self.get_position()}")
-        print(f"Car {self.id} has a status of {self.status.value}")
-        print(f"Car {self.id} has a speed of {self.speed}")
-        print(f"Car {self.id} has a fuel of {self.fuel}")
-        print(f"Car {self.id} is going to {self.destinity.value}")
-        print(f"Car {self.id} has a path of {self.path}")
-        print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n")
+        # print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+        # print('This is a car')
+        # print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+        # print(f"Car {self.id} is in position {self.get_position()}")
+        # print(f"Car {self.id} has a status of {self.status.value}")
+        # print(f"Car {self.id} has a speed of {self.speed}")
+        # print(f"Car {self.id} has a fuel of {self.fuel}")
+        # print(f"Car {self.id} is going to {self.destinity.value}")
+        # print(f"Car {self.id} has a path of {self.path}")
+        # print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n")
+
+
+        
+        info = {
+            'id': self.id,
+            'type': 'Car',
+            'position': self.get_position(),
+            'status': self.status.value,
+            'speed': self.speed,
+            'fuel': self.fuel,
+            'destinity': self.destinity.value
+        }
+
+        if self.status == CarStatus.IN_DESTINY and not self.info_added and self.fuel > 0:
+            self.info_added = True
+            print(info)
+            self.model.model_data.append(info)
+        
+        if self.status != CarStatus.IN_DESTINY and self.fuel > 0:
+            print(info)
+            self.model.model_data.append(info)
+
+        
 
     def get_position(self):
         """
@@ -97,10 +122,9 @@ class Car(ap.Agent):
         """
 
         start = self.get_position()
-        goal = self.destinity
-        goal_coordinates = [destination['coordinates'] for destination in self.env.destinities if destination['destinity'] == goal][0]
-        self.path = A_star.find_path(road_network=self.model.routes_network, start=start, goal=goal_coordinates, agent_type='car')
-
+        goal = self.destinity_coordinates
+        self.path = A_star.find_path(road_network=self.model.routes_network, start=start, goal=goal, agent_type='car')
+        print(f"Car {self.id} calculated path: {self.path}")
 
     def get_semphore_state(self):
         """
@@ -152,12 +176,11 @@ class Car(ap.Agent):
         """
         Verifica si el coche ha llegado a su destino
         """
-        for destination in self.env.destinities:
-            if self.destinity.value == destination['destinity']:
-                if destination['coordinates'] == self.get_position():
-                    self.status = CarStatus.IN_DESTINY
-                    print(f"Car {self.id} is in destiny")
-
+        if self.get_position() == self.destinity_coordinates:
+            print(f"Car {self.id} arrived to {self.destinity.value}")
+            self.status = CarStatus.IN_DESTINY
+            self.speed = 0
+            
         
 
     def communicate(self,mesage_type,recipient, message):
@@ -193,12 +216,16 @@ class Car(ap.Agent):
         self.avoid_collision()
         self.wait_semaphore()
 
+        if self.fuel < 0:
+            print(f"Car {self.id} is out of fuel")
+            self.status = CarStatus.STOPPED
+
         if self.status == CarStatus.IN_MOVEMENT and self.fuel > 0:
             if self.path:
                 next_position = self.path.pop(0)
                 self.env.move_to(self, next_position)
                 print(f"Car {self.id} moved to {next_position}, {self.status.value}")
-            self.fuel -= 7
+            self.fuel -= 0.5
         
         self.in_destiny()
 
@@ -208,7 +235,7 @@ class Car(ap.Agent):
 
         """
 
-        # self.info()
+        self.info()
         self.move()
         
  
