@@ -2,6 +2,11 @@ import asyncio
 import websockets
 import json
 
+
+# TODO: Import the model and run the simulation
+# TODO: Extract the data from the model
+# TODO: Send the data to the server
+
 async def send_data():
     try:
         async with websockets.connect('ws://localhost:8765') as websocket:

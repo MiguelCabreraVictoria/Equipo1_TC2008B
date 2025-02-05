@@ -4,6 +4,8 @@ from model_types.dtos.SemaphoreLight import SemaphoreLight
 from dataclasses import dataclass, asdict
 from typing import List, Tuple, Dict
 
+
+# TODO: # TODO add directions to lanes (N, S, E, W)
 @dataclass(frozen=True)
 class Parameter:
     """
