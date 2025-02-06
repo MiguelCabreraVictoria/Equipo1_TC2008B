@@ -16,7 +16,7 @@ Modelación de sistemas multiagentes con gráficas computacionales TC2008B
 
 ## Introduccion
 
-En las cuidades modernas, los peatones enfretan obstaculos que comprometen su movilidad, seguridad y accesbilidad, especialmente en entornos donde interactuan con vehiculos por lo que se requiere una infraestructura y comunicacion adecuada.
+En las cuidades modernas, los peatones enfretan obstaculos que comprometen su movilidad, seguridad y accesbilidad, especialmente en entornos donde interactuan con vehiculos por lo que se requiere una infraestructura y comunicacion adecuada.Por lo que la simulación busca representar y analizar el comportamiento de tráfico vehicular y peatonal en un entorno urbano controlado, incorporando semáforos, cruces peatonales y diferentes tipos de obstáculos. El objetivo es modelar interacciones realistas entre agentes (vehículos, peatones, semáforos) y el entorno para mejorar la gestión del tráfico y reducir posibles conflictos.
 
 
 
@@ -44,6 +44,7 @@ En las cuidades modernas, los peatones enfretan obstaculos que comprometen su mo
             - Ejecutar el proyecto 
 
         python Web-Socket/python_client.py
+        
 
 ## Funcionamiento del Codigo
 
@@ -52,6 +53,12 @@ En las cuidades modernas, los peatones enfretan obstaculos que comprometen su mo
 
 #### Protocolos de interaccion ( Comunicacion bidireccional )
 ![Protocolos](images/protocolo.png)
+
+
+#### Simulacion en Unity
+![Imagen1](images/imagen1.jpeg)
+![Imagen1](images/imagen2.jpeg)
+![Imagen1](images/imagen3.jpeg)
 
 ## Autores
 
