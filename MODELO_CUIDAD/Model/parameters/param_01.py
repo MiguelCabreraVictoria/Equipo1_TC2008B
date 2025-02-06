@@ -1,6 +1,6 @@
-from model_types.value_objects.Parameters_VO import Parameter
-from model_types.dtos.Destinities import Destinities
-from model_types.dtos.SemaphoreLight import SemaphoreLight
+from Model.model_types.value_objects.Parameters_VO import Parameter
+from Model.model_types.dtos.Destinities import Destinities
+from Model.model_types.dtos.SemaphoreLight import SemaphoreLight
 
 param_01 = Parameter(
     environment_size=(20, 20),
@@ -22,7 +22,7 @@ param_01 = Parameter(
         (19, 2), (19, 3), (19, 4), (19, 5), (19, 6), (19, 7), (19, 8), (19, 9), (19, 10), (19, 11), (19, 12), 
         (19, 13), (19, 14), (19, 15), (19, 16), (19, 17), (19, 18), (19, 19)
     ],
-
+    # TODO add directions to lanes (N, S, E, W)
     lanes=[(1,1),(1,2),(1,3),(1,4),(1,5),(1,6),(1,7),(1,9),(1,10),(1,11),(1,12),(1,13),(1,15),(1,16),(1,17),(1,18),
            (2,1),(2,2),(2,3),(2,4),(2,5),(2,6),(2,7),(2,9),(2,10),(2,11),(2,12),(2,13),(2,15),(2,16),(2,17),(2,18),
            (3,1),(3,2),(3,3),(3,4),(3,5),(3,6),(3,7),(3,9),(3,10),(3,11),(3,12),(3,13),(3,15),(3,16),(3,17),(3,18),
