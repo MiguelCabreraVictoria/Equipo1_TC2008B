@@ -38,7 +38,7 @@ En las cuidades modernas, los peatones enfretan obstaculos que comprometen su mo
 
 ## Uso 
 
-        source setup.sh 
+        source MODELO_CUIDAD/setup.sh 
 
         > Abrir la carpeta City en Unity
             - Ejecutar el proyecto 
